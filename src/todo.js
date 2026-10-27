@@ -4,13 +4,15 @@ export default class Todo {
     #description;
     #dueDate;
     #priority;
+    #projectId;
     #checklist;
     
-    constructor (title, description, dueDate, priority, checklist = []) {
+    constructor (title, description, dueDate, priority, projectId, checklist = []) {
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
         this.priority = priority;
+        this.projectId = projectId;
         this.checklist = checklist;
     }
 
@@ -57,6 +59,7 @@ export default class Todo {
     }
 
     set dueDate (value) {
+        // Add more robust date validation later
         if (typeof value !== "string") {
             throw new Error("Due date must be a string");
         } else {
@@ -73,6 +76,19 @@ export default class Todo {
             throw new Error("Priority must be 'low', 'medium', or 'high'");
         } else {
             this.#priority = value;
+        }
+    }
+
+    get projectId () {
+        return this.#projectId;
+    }
+
+    set projectId (value) {
+        // Add a check to ensure the project exists
+        if (!Number.isInteger(value) || value < 1) {
+            throw new Error("Project ID must be a positive integer");
+        } else {
+            this.#projectId = value;
         }
     }
 

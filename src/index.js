@@ -1,5 +1,5 @@
 import Todo from "./todo.js";
-import Project from "./project.js";
+import { createProject } from "./storage.js";
 
 // When localStorage is empty, create a default project. Need to add check
-const defaultProject = new Project("Default", "This is the default project");
+const defaultProject = createProject("Default", "This is the default project");

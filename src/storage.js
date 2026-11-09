@@ -32,6 +32,16 @@ export function getTodosByProject (projectId) {
     return todos.filter(todo => todo.projectId === projectId);
 }
 
+export function removeTodo (todo) {
+    const index = todos.indexOf(todo);
+
+    if (index === - 1) {
+        throw new Error("Todo is not in the list");
+    }
+
+    todos.splice(index, 1);
+}
+
 export function getProjects () {
     return projects.slice();
 }

@@ -42,6 +42,15 @@ export function removeTodo (todo) {
     todos.splice(index, 1);
 }
 
+export function moveTodo (todo, projectId) {
+    const project = projects.find(p => p.id === projectId);
+    
+    if (project === undefined) {
+        throw new Error("No project exists with chosen projectId");
+    }
+    todo.projectId = projectId;
+}
+
 export function getProjects () {
     return projects.slice();
 }

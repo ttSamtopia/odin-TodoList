@@ -1,4 +1,8 @@
+// Add so this checks against highest in localStorage
+let highestId = 0;
+
 export default class Todo {
+    #id;
     #completed = false;
     #title;
     #description;
@@ -14,9 +18,13 @@ export default class Todo {
         this.priority = priority;
         this.projectId = projectId;
         this.checklist = checklist;
+        highestId++;
+        this.#id = highestId;
     }
 
-    
+    get id () {
+        return this.#id;
+    }
 
     get completed () {
         return this.#completed;

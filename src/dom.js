@@ -4,14 +4,35 @@ const domProjectList = document.querySelector("#project-list");
 const domProjectForm = document.querySelector("#project-form");
 const domTodosHeading = document.querySelector("#todos-heading");
 
+let selectedProject;
 
 export function renderProjects () {
-    projectList.innerHTML = "";
+    domProjectList.innerHTML = "";
+
+    if (selectedProject === undefined) {
+        selectedProject = getProjects()[0];
+    }
 
     for (const project of getProjects()) {
         const item = document.createElement("li");
         item.textContent = project.title;
-        projectList.appendChild(item);
+
+        if (project === selectedProject) {
+            item.classList.add("selected");
+        }
+
+        item.addEventListener("click", () => {
+            selectedProject = project;
+            renderProjects();
+            renderTodos();
+        });
+
+        domProjectList.appendChild(item);
+    }
+
+    domTodosHeading.textContent = selectedProject.title;
+}
+
     }
 }
 

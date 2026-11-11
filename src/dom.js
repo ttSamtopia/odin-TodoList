@@ -1,4 +1,4 @@
-import { getProjects, createProject, getTodosByProject, addTodo, removeTodo } from "./storage.js";
+import { getProjects, createProject, getTodosByProject, addTodo, removeTodo, removeProject } from "./storage.js";
 
 const domProjectList = document.querySelector("#project-list");
 const domProjectForm = document.querySelector("#project-form");
@@ -32,6 +32,30 @@ export function renderProjects () {
             renderTodos();
             renderTodoDetails();
         });
+
+        const deleteProjectButton = document.createElement("button");
+        deleteProjectButton.textContent = "Delete";
+        deleteProjectButton.addEventListener("click", (event) => {
+            event.stopPropagation();
+
+            try {
+                removeProject(project);
+            } catch (error) {
+                alert(error.message);
+                return;
+            }
+
+            if (project === selectedProject) {
+                selectedProject = getProjects()[0];
+            }
+
+            selectedTodo = null;
+            renderProjects();
+            renderTodos();
+            renderTodoDetails();
+        });
+
+        item.appendChild(deleteProjectButton);
 
         domProjectList.appendChild(item);
     }

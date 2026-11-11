@@ -5,8 +5,10 @@ const domProjectForm = document.querySelector("#project-form");
 const domTodosHeading = document.querySelector("#todos-heading");
 const domTodoList = document.querySelector("#todo-list");
 const domTodoForm = document.querySelector("#todo-form");
+const domTodoDetails = document.querySelector("#todo-details");
 
 let selectedProject;
+let selectedTodo = null;
 
 export function renderProjects () {
     domProjectList.innerHTML = "";
@@ -25,8 +27,10 @@ export function renderProjects () {
 
         item.addEventListener("click", () => {
             selectedProject = project;
+            selectedTodo = null;
             renderProjects();
             renderTodos();
+            renderTodoDetails();
         });
 
         domProjectList.appendChild(item);
@@ -44,8 +48,48 @@ export function renderTodos () {
 
         item.classList.add("priority" + todo.priority.charAt(0).toUpperCase() + todo.priority.slice(1));
 
+        item.addEventListener("click", () => {
+            selectedTodo = todo;
+            renderTodoDetails();
+        });
+
         domTodoList.appendChild(item);
     }
+}
+
+function renderTodoDetails () {
+    domTodoDetails.innerHTML = "";
+
+    if (selectedTodo === null) {
+        return;
+    }
+
+    const heading = document.createElement("h3");
+    heading.textContent = selectedTodo.title;
+    domTodoDetails.appendChild(heading);
+
+    const lines = [
+        "Description: " + selectedTodo.description,
+        "Due date: " + selectedTodo.dueDate,
+        "Priority: " + selectedTodo.priority,
+        "Checklist:"
+    ];
+
+    for (const line of lines) {
+        const paragraph = document.createElement("p");
+        paragraph.textContent = line;
+        domTodoDetails.appendChild(paragraph);
+    }
+
+    const checklist = document.createElement("ul");
+
+    for (const entry of selectedTodo.checklist) {
+        const entryItem = document.createElement("li");
+        entryItem.textContent = entry;
+        checklist.appendChild(entryItem);
+    }
+
+    domTodoDetails.appendChild(checklist);
 }
 
 domProjectForm.addEventListener("submit", (event) => {

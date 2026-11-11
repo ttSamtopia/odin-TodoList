@@ -40,6 +40,9 @@ export function renderTodos () {
     for (const todo of getTodosByProject(selectedProject.id)) {
         const item = document.createElement("li");
         item.textContent = todo.title + " - " + todo.dueDate;
+
+        item.classList.add("priority" + todo.priority.charAt(0).toUpperCase() + todo.priority.slice(1));
+
         domTodoList.appendChild(item);
     }
 }

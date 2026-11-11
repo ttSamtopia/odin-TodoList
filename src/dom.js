@@ -12,8 +12,8 @@ let selectedProject;
 let selectedTodo = null;
 
 function formatDueDate (dueDate) {
-    dueDate = format(dueDate, "dd MMM y")
-    return dueDate;
+    const parts = dueDate.split("-");
+    return format(new Date(parts[0], parts[1] - 1, parts[2]), "dd MMM y");
 }
 
 export function renderProjects () {

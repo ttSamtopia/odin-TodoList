@@ -1,4 +1,5 @@
 import { getProjects, createProject, getTodosByProject, addTodo, removeTodo, removeProject } from "./storage.js";
+import { format } from "date-fns";
 
 const domProjectList = document.querySelector("#project-list");
 const domProjectForm = document.querySelector("#project-form");
@@ -9,6 +10,11 @@ const domTodoDetails = document.querySelector("#todo-details");
 
 let selectedProject;
 let selectedTodo = null;
+
+function formatDueDate (dueDate) {
+    dueDate = format(dueDate, "dd MMM y")
+    return dueDate;
+}
 
 export function renderProjects () {
     domProjectList.innerHTML = "";
@@ -68,7 +74,7 @@ export function renderTodos () {
 
     for (const todo of getTodosByProject(selectedProject.id)) {
         const item = document.createElement("li");
-        item.textContent = todo.title + " - " + todo.dueDate;
+        item.textContent = todo.title + " - " + formatDueDate(todo.dueDate);
 
         item.classList.add("priority" + todo.priority.charAt(0).toUpperCase() + todo.priority.slice(1));
 
@@ -112,7 +118,7 @@ function renderTodoDetails () {
 
     const lines = [
         "Description: " + selectedTodo.description,
-        "Due date: " + selectedTodo.dueDate,
+        "Due date: " + formatDueDate(selectedTodo.dueDate),
         "Priority: " + selectedTodo.priority,
         "Completed: " + selectedTodo.completed,
         "Checklist:"

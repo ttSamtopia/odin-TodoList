@@ -51,6 +51,21 @@ export function moveTodo (todo, projectId) {
     todo.projectId = projectId;
 }
 
+export function removeProject (project) {
+    const index = projects.indexOf(project);
+
+    if (index === -1) {
+        throw new Error("Project is not in the list");
+    } else if (index === 0) {
+        throw new Error("Can't delete default project");
+    }
+
+    const deletedProjectsTodos = getTodosByProject(project.id);
+    deletedProjectsTodos.forEach(todo => (moveTodo(todo, projects[0].id)));
+
+    projects.splice(index, 1);
+}
+
 export function getProjects () {
     return projects.slice();
 }

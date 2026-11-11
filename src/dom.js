@@ -48,6 +48,24 @@ export function renderTodos () {
 
         item.classList.add("priority" + todo.priority.charAt(0).toUpperCase() + todo.priority.slice(1));
 
+        const completeButton = document.createElement("button");
+
+        if (todo.completed) {
+            item.classList.add("completed");
+            completeButton.textContent = "Revert";
+        } else {
+            completeButton.textContent = "Complete";
+        }
+
+        completeButton.addEventListener("click", (event) => {
+            event.stopPropagation();
+            todo.completed = !todo.completed;
+            renderTodos();
+            renderTodoDetails();
+        });
+
+        item.appendChild(completeButton);
+
         item.addEventListener("click", () => {
             selectedTodo = todo;
             renderTodoDetails();
@@ -72,6 +90,7 @@ function renderTodoDetails () {
         "Description: " + selectedTodo.description,
         "Due date: " + selectedTodo.dueDate,
         "Priority: " + selectedTodo.priority,
+        "Completed: " + selectedTodo.completed,
         "Checklist:"
     ];
 

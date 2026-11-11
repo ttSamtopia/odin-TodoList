@@ -1,6 +1,9 @@
 import { getProjects, createProject } from "./storage.js";
 
-const projectList = document.querySelector("#project-list");
+const domProjectList = document.querySelector("#project-list");
+const domProjectForm = document.querySelector("#project-form");
+const domTodosHeading = document.querySelector("#todos-heading");
+
 
 export function renderProjects () {
     projectList.innerHTML = "";
@@ -12,3 +15,16 @@ export function renderProjects () {
     }
 }
 
+domProjectForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    try {
+        createProject(domProjectForm.elements.title.value, domProjectForm.elements.description.value);
+    } catch (error) {
+        alert(error.message);
+        return;
+    }
+
+    domProjectForm.reset();
+    renderProjects();
+});

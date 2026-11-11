@@ -134,6 +134,34 @@ function renderTodoDetails () {
 
     domTodoDetails.appendChild(checklist);
 
+    const checklistForm = document.createElement("form");
+
+    const checklistInput = document.createElement("input");
+    checklistInput.setAttribute("type", "text");
+    checklistInput.setAttribute("name", "checklistItem");
+    checklistInput.setAttribute("required", "");
+    checklistForm.appendChild(checklistInput);
+
+    const checklistAddButton = document.createElement("button");
+    checklistAddButton.setAttribute("type", "submit");
+    checklistAddButton.textContent = "Add item";
+    checklistForm.appendChild(checklistAddButton);
+
+    checklistForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        try {
+            selectedTodo.checklist = selectedTodo.checklist.concat([checklistForm.elements.checklistItem.value]);
+        } catch (error) {
+            alert(error.message);
+            return;
+        }
+
+        renderTodoDetails();
+    });
+
+    domTodoDetails.appendChild(checklistForm);
+
     const editButton = document.createElement("button");
     editButton.textContent = "Edit";
     editButton.addEventListener("click", renderTodoEditForm);

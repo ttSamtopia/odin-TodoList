@@ -1,9 +1,10 @@
-import { getProjects, createProject, getTodosByProject } from "./storage.js";
+import { getProjects, createProject, getTodosByProject, addTodo } from "./storage.js";
 
 const domProjectList = document.querySelector("#project-list");
 const domProjectForm = document.querySelector("#project-form");
 const domTodosHeading = document.querySelector("#todos-heading");
 const domTodoList = document.querySelector("#todo-list");
+const domTodoForm = document.querySelector("#todo-form");
 
 let selectedProject;
 
@@ -59,4 +60,24 @@ domProjectForm.addEventListener("submit", (event) => {
 
     domProjectForm.reset();
     renderProjects();
+});
+
+domTodoForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    try {
+        addTodo(
+            domTodoForm.elements.title.value,
+            domTodoForm.elements.description.value,
+            domTodoForm.elements.dueDate.value,
+            domTodoForm.elements.priority.value,
+            selectedProject.id
+        );
+    } catch (error) {
+        alert(error.message);
+        return;
+    }
+
+    domTodoForm.reset();
+    renderTodos();
 });

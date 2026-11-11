@@ -1,8 +1,9 @@
-import { getProjects, createProject } from "./storage.js";
+import { getProjects, createProject, getTodosByProject } from "./storage.js";
 
 const domProjectList = document.querySelector("#project-list");
 const domProjectForm = document.querySelector("#project-form");
 const domTodosHeading = document.querySelector("#todos-heading");
+const domTodoList = document.querySelector("#todo-list");
 
 let selectedProject;
 
@@ -33,6 +34,13 @@ export function renderProjects () {
     domTodosHeading.textContent = selectedProject.title;
 }
 
+export function renderTodos () {
+    domTodoList.innerHTML = "";
+
+    for (const todo of getTodosByProject(selectedProject.id)) {
+        const item = document.createElement("li");
+        item.textContent = todo.title + " - " + todo.dueDate;
+        domTodoList.appendChild(item);
     }
 }
 

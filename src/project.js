@@ -1,5 +1,8 @@
-// Add so this checks against highest in localStorage
-let highestId = 0;
+let projectHighestId = 0;
+
+export function setProjectHighestId (value) {
+    projectHighestId = value;
+}
 
 export default class Project {
     #title;
@@ -9,8 +12,8 @@ export default class Project {
     constructor (title, description) {
         this.title = title;
         this.description = description;
-        highestId++;
-        this.#id = highestId;
+        projectHighestId++;
+        this.#id = projectHighestId;
     }
 
     get title () {

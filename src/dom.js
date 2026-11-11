@@ -1,5 +1,6 @@
 import { getProjects, createProject, getTodosByProject, addTodo, removeTodo, removeProject } from "./storage.js";
 import { format } from "date-fns";
+import { save } from "./persistence.js";
 
 const domProjectList = document.querySelector("#project-list");
 const domProjectForm = document.querySelector("#project-form");
@@ -51,6 +52,8 @@ export function renderProjects () {
                 return;
             }
 
+            save();
+
             if (project === selectedProject) {
                 selectedProject = getProjects()[0];
             }
@@ -90,6 +93,7 @@ export function renderTodos () {
         completeButton.addEventListener("click", (event) => {
             event.stopPropagation();
             todo.completed = !todo.completed;
+            save();
             renderTodos();
             renderTodoDetails();
         });
@@ -164,6 +168,7 @@ function renderTodoDetails () {
         }
 
         renderTodoDetails();
+        save()
     });
 
     domTodoDetails.appendChild(checklistForm);
@@ -177,6 +182,7 @@ function renderTodoDetails () {
     deleteButton.textContent = "Delete";
     deleteButton.addEventListener("click", () => {
         removeTodo(selectedTodo);
+        save();
         selectedTodo = null;
         renderTodos();
         renderTodoDetails();
@@ -253,6 +259,7 @@ function renderTodoEditForm () {
             return;
         }
 
+        save();
         renderTodos();
         renderTodoDetails();
     });
@@ -270,6 +277,7 @@ domProjectForm.addEventListener("submit", (event) => {
         return;
     }
 
+    save();
     domProjectForm.reset();
     renderProjects();
 });
@@ -290,6 +298,7 @@ domTodoForm.addEventListener("submit", (event) => {
         return;
     }
 
+    save();
     domTodoForm.reset();
     renderTodos();
 });

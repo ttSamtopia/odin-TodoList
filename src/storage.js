@@ -69,3 +69,7 @@ export function removeProject (project) {
 export function getProjects () {
     return projects.slice();
 }
+
+export function getTodos () {
+    return todos.slice();
+}

@@ -1,7 +1,9 @@
 import { createProject } from "./storage.js";
 import { renderProjects, renderTodos } from "./dom.js";
+import { load } from "./persistence.js";
 
-// When localStorage is empty, create a default project. Need to add check
-createProject("Default", "This is the default project");
+if (!load()) {
+    createProject("Default", "This is the default project");
+}
 renderProjects();
 renderTodos();

@@ -90,6 +90,87 @@ function renderTodoDetails () {
     }
 
     domTodoDetails.appendChild(checklist);
+
+    const editButton = document.createElement("button");
+    editButton.textContent = "Edit";
+    editButton.addEventListener("click", renderTodoEditForm);
+    domTodoDetails.appendChild(editButton);
+}
+
+function renderTodoEditForm () {
+    domTodoDetails.innerHTML = "";
+
+    const form = document.createElement("form");
+
+    const fields = [
+        { name: "title", text: "Title", type: "text", value: selectedTodo.title, required: true },
+        { name: "description", text: "Description", type: "text", value: selectedTodo.description, required: false },
+        { name: "dueDate", text: "Due date", type: "date", value: selectedTodo.dueDate, required: true }
+    ];
+
+    for (const field of fields) {
+        const label = document.createElement("label");
+        label.textContent = field.text;
+
+        const input = document.createElement("input");
+        input.setAttribute("type", field.type);
+        input.setAttribute("name", field.name);
+        input.value = field.value;
+
+        if (field.required) {
+            input.setAttribute("required", "");
+        }
+
+        label.appendChild(input);
+        form.appendChild(label);
+    }
+
+    const priorityLabel = document.createElement("label");
+    priorityLabel.textContent = "Priority";
+
+    const prioritySelect = document.createElement("select");
+    prioritySelect.setAttribute("name", "priority");
+
+    for (const priority of ["low", "medium", "high"]) {
+        const option = document.createElement("option");
+        option.setAttribute("value", priority);
+        option.textContent = priority;
+        prioritySelect.appendChild(option);
+    }
+
+    prioritySelect.value = selectedTodo.priority;
+    priorityLabel.appendChild(prioritySelect);
+    form.appendChild(priorityLabel);
+
+    const saveButton = document.createElement("button");
+    saveButton.setAttribute("type", "submit");
+    saveButton.textContent = "Save";
+    form.appendChild(saveButton);
+
+    const cancelButton = document.createElement("button");
+    cancelButton.setAttribute("type", "button");
+    cancelButton.textContent = "Cancel";
+    cancelButton.addEventListener("click", renderTodoDetails);
+    form.appendChild(cancelButton);
+
+    form.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        try {
+            selectedTodo.title = form.elements.title.value;
+            selectedTodo.description = form.elements.description.value;
+            selectedTodo.dueDate = form.elements.dueDate.value;
+            selectedTodo.priority = form.elements.priority.value;
+        } catch (error) {
+            alert(error.message);
+            return;
+        }
+
+        renderTodos();
+        renderTodoDetails();
+    });
+
+    domTodoDetails.appendChild(form);
 }
 
 domProjectForm.addEventListener("submit", (event) => {

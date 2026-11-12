@@ -1,63 +1,63 @@
 <!doctype html><html lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1.0"><title>Todo List</title><link rel=stylesheet href=styles.css></head><body>
-    <header>
-        <h1>Todo List</h1>
-    </header>
+		<header>
+			<h1>Todo List</h1>
+		</header>
 
-    <div id=projects>
-        <h2>Projects</h2>
-        <ul id=project-list></ul>
+		<div id=projects>
+			<h2>Projects</h2>
+			<ul id=project-list></ul>
 
-        <form id=project-form>
-            <label>
-                Title
-                <input type=text id=project-title name=title required>
-            </label>
+			<form id=project-form>
+				<label>
+					Title
+					<input type=text id=project-title name=title required>
+				</label>
 
-            <label>
-                Description
-                <input type=text id=project-description name=description>
-            </label>
+				<label>
+					Description
+					<input type=text id=project-description name=description>
+				</label>
 
-            <button type=submit>Add project</button>
-        </form>
-    </div>
+				<button type=submit>Add project</button>
+			</form>
+		</div>
 
-    <div id=todos>
-        <h2 id=todos-heading>Todos</h2>
-        <ul id=todo-list></ul>
+		<div id=todos>
+			<h2 id=todos-heading>Todos</h2>
+			<ul id=todo-list></ul>
 
-        <form id=todo-form>
-            <label>
-                Title
-                <input type=text id=todo-title name=title required>
-            </label>
+			<form id=todo-form>
+				<label>
+					Title
+					<input type=text id=todo-title name=title required>
+				</label>
 
-            <label>
-                Description
-                <input type=text id=todo-description name=description>
-            </label>
+				<label>
+					Description
+					<input type=text id=todo-description name=description>
+				</label>
 
-            <label>
-                Due date
-                <input type=date id=todo-due-date name=dueDate required>
-            </label>
+				<label>
+					Due date
+					<input type=date id=todo-due-date name=dueDate required>
+				</label>
 
-            <label>
-                Priority
-                <select id=todo-priority name=priority>
-                    <option value=low>Low</option>
-                    <option value=medium selected>Medium</option>
-                    <option value=high>High</option>
-                </select>
-            </label>
+				<label>
+					Priority
+					<select id=todo-priority name=priority>
+						<option value=low>Low</option>
+						<option value=medium selected>Medium</option>
+						<option value=high>High</option>
+					</select>
+				</label>
 
-            <button type=submit>Add todo</button>
-        </form>
-    </div>
+				<button type=submit>Add todo</button>
+			</form>
+		</div>
 
-    <div id=todo-details></div>
+		<div id=todo-details></div>
 
-    <script src=index.js></script>
-
+		<script src=index.js></script>
+	
 
 </body></html>

@@ -1,4 +1,11 @@
-import { getProjects, createProject, getTodosByProject, addTodo, removeTodo, removeProject } from "./storage.js";
+import {
+	getProjects,
+	createProject,
+	getTodosByProject,
+	addTodo,
+	removeTodo,
+	removeProject,
+} from "./storage.js";
 import { format } from "date-fns";
 import { save } from "./persistence.js";
 
@@ -12,293 +19,320 @@ const domTodoDetails = document.querySelector("#todo-details");
 let selectedProject;
 let selectedTodo = null;
 
-function formatDueDate (dueDate) {
-    const parts = dueDate.split("-");
-    return format(new Date(parts[0], parts[1] - 1, parts[2]), "dd MMM y");
+function formatDueDate(dueDate) {
+	const parts = dueDate.split("-");
+	return format(new Date(parts[0], parts[1] - 1, parts[2]), "dd MMM y");
 }
 
-export function renderProjects () {
-    domProjectList.innerHTML = "";
+export function renderProjects() {
+	domProjectList.innerHTML = "";
 
-    if (selectedProject === undefined) {
-        selectedProject = getProjects()[0];
-    }
+	if (selectedProject === undefined) {
+		selectedProject = getProjects()[0];
+	}
 
-    for (const project of getProjects()) {
-        const item = document.createElement("li");
-        item.textContent = project.title;
+	for (const project of getProjects()) {
+		const item = document.createElement("li");
+		item.textContent = project.title;
 
-        if (project === selectedProject) {
-            item.classList.add("selected");
-        }
+		if (project === selectedProject) {
+			item.classList.add("selected");
+		}
 
-        item.addEventListener("click", () => {
-            selectedProject = project;
-            selectedTodo = null;
-            renderProjects();
-            renderTodos();
-            renderTodoDetails();
-        });
+		item.addEventListener("click", () => {
+			selectedProject = project;
+			selectedTodo = null;
+			renderProjects();
+			renderTodos();
+			renderTodoDetails();
+		});
 
-        const deleteProjectButton = document.createElement("button");
-        deleteProjectButton.textContent = "Delete";
-        deleteProjectButton.addEventListener("click", (event) => {
-            event.stopPropagation();
+		const deleteProjectButton = document.createElement("button");
+		deleteProjectButton.textContent = "Delete";
+		deleteProjectButton.addEventListener("click", (event) => {
+			event.stopPropagation();
 
-            try {
-                removeProject(project);
-            } catch (error) {
-                alert(error.message);
-                return;
-            }
+			try {
+				removeProject(project);
+			} catch (error) {
+				alert(error.message);
+				return;
+			}
 
-            save();
+			save();
 
-            if (project === selectedProject) {
-                selectedProject = getProjects()[0];
-            }
+			if (project === selectedProject) {
+				selectedProject = getProjects()[0];
+			}
 
-            selectedTodo = null;
-            renderProjects();
-            renderTodos();
-            renderTodoDetails();
-        });
+			selectedTodo = null;
+			renderProjects();
+			renderTodos();
+			renderTodoDetails();
+		});
 
-        item.appendChild(deleteProjectButton);
+		item.appendChild(deleteProjectButton);
 
-        domProjectList.appendChild(item);
-    }
+		domProjectList.appendChild(item);
+	}
 
-    domTodosHeading.textContent = selectedProject.title;
+	domTodosHeading.textContent = selectedProject.title;
 }
 
-export function renderTodos () {
-    domTodoList.innerHTML = "";
+export function renderTodos() {
+	domTodoList.innerHTML = "";
 
-    for (const todo of getTodosByProject(selectedProject.id)) {
-        const item = document.createElement("li");
-        item.textContent = todo.title + " - " + formatDueDate(todo.dueDate);
+	for (const todo of getTodosByProject(selectedProject.id)) {
+		const item = document.createElement("li");
+		item.textContent = todo.title + " - " + formatDueDate(todo.dueDate);
 
-        item.classList.add("priority" + todo.priority.charAt(0).toUpperCase() + todo.priority.slice(1));
+		item.classList.add(
+			"priority" +
+				todo.priority.charAt(0).toUpperCase() +
+				todo.priority.slice(1),
+		);
 
-        const completeButton = document.createElement("button");
+		const completeButton = document.createElement("button");
 
-        if (todo.completed) {
-            item.classList.add("completed");
-            completeButton.textContent = "Revert";
-        } else {
-            completeButton.textContent = "Complete";
-        }
+		if (todo.completed) {
+			item.classList.add("completed");
+			completeButton.textContent = "Revert";
+		} else {
+			completeButton.textContent = "Complete";
+		}
 
-        completeButton.addEventListener("click", (event) => {
-            event.stopPropagation();
-            todo.completed = !todo.completed;
-            save();
-            renderTodos();
-            renderTodoDetails();
-        });
+		completeButton.addEventListener("click", (event) => {
+			event.stopPropagation();
+			todo.completed = !todo.completed;
+			save();
+			renderTodos();
+			renderTodoDetails();
+		});
 
-        item.appendChild(completeButton);
+		item.appendChild(completeButton);
 
-        item.addEventListener("click", () => {
-            selectedTodo = todo;
-            renderTodoDetails();
-        });
+		item.addEventListener("click", () => {
+			selectedTodo = todo;
+			renderTodoDetails();
+		});
 
-        domTodoList.appendChild(item);
-    }
+		domTodoList.appendChild(item);
+	}
 }
 
-function renderTodoDetails () {
-    domTodoDetails.innerHTML = "";
+function renderTodoDetails() {
+	domTodoDetails.innerHTML = "";
 
-    if (selectedTodo === null) {
-        return;
-    }
+	if (selectedTodo === null) {
+		return;
+	}
 
-    const heading = document.createElement("h3");
-    heading.textContent = selectedTodo.title;
-    domTodoDetails.appendChild(heading);
+	const heading = document.createElement("h3");
+	heading.textContent = selectedTodo.title;
+	domTodoDetails.appendChild(heading);
 
-    const lines = [
-        "Description: " + selectedTodo.description,
-        "Due date: " + formatDueDate(selectedTodo.dueDate),
-        "Priority: " + selectedTodo.priority,
-        "Completed: " + selectedTodo.completed,
-        "Checklist:"
-    ];
+	const lines = [
+		"Description: " + selectedTodo.description,
+		"Due date: " + formatDueDate(selectedTodo.dueDate),
+		"Priority: " + selectedTodo.priority,
+		"Completed: " + selectedTodo.completed,
+		"Checklist:",
+	];
 
-    for (const line of lines) {
-        const paragraph = document.createElement("p");
-        paragraph.textContent = line;
-        domTodoDetails.appendChild(paragraph);
-    }
+	for (const line of lines) {
+		const paragraph = document.createElement("p");
+		paragraph.textContent = line;
+		domTodoDetails.appendChild(paragraph);
+	}
 
-    const checklist = document.createElement("ul");
+	const checklist = document.createElement("ul");
 
-    for (const entry of selectedTodo.checklist) {
-        const entryItem = document.createElement("li");
-        entryItem.textContent = entry;
-        checklist.appendChild(entryItem);
-    }
+	for (const entry of selectedTodo.checklist) {
+		const entryItem = document.createElement("li");
+		entryItem.textContent = entry;
+		checklist.appendChild(entryItem);
+	}
 
-    domTodoDetails.appendChild(checklist);
+	domTodoDetails.appendChild(checklist);
 
-    const checklistForm = document.createElement("form");
+	const checklistForm = document.createElement("form");
 
-    const checklistInput = document.createElement("input");
-    checklistInput.setAttribute("type", "text");
-    checklistInput.setAttribute("name", "checklistItem");
-    checklistInput.setAttribute("required", "");
-    checklistForm.appendChild(checklistInput);
+	const checklistInput = document.createElement("input");
+	checklistInput.setAttribute("type", "text");
+	checklistInput.setAttribute("name", "checklistItem");
+	checklistInput.setAttribute("required", "");
+	checklistForm.appendChild(checklistInput);
 
-    const checklistAddButton = document.createElement("button");
-    checklistAddButton.setAttribute("type", "submit");
-    checklistAddButton.textContent = "Add item";
-    checklistForm.appendChild(checklistAddButton);
+	const checklistAddButton = document.createElement("button");
+	checklistAddButton.setAttribute("type", "submit");
+	checklistAddButton.textContent = "Add item";
+	checklistForm.appendChild(checklistAddButton);
 
-    checklistForm.addEventListener("submit", (event) => {
-        event.preventDefault();
+	checklistForm.addEventListener("submit", (event) => {
+		event.preventDefault();
 
-        try {
-            selectedTodo.checklist = selectedTodo.checklist.concat([checklistForm.elements.checklistItem.value]);
-        } catch (error) {
-            alert(error.message);
-            return;
-        }
+		try {
+			selectedTodo.checklist = selectedTodo.checklist.concat([
+				checklistForm.elements.checklistItem.value,
+			]);
+		} catch (error) {
+			alert(error.message);
+			return;
+		}
 
-        renderTodoDetails();
-        save()
-    });
+		renderTodoDetails();
+		save();
+	});
 
-    domTodoDetails.appendChild(checklistForm);
+	domTodoDetails.appendChild(checklistForm);
 
-    const editButton = document.createElement("button");
-    editButton.textContent = "Edit";
-    editButton.addEventListener("click", renderTodoEditForm);
-    domTodoDetails.appendChild(editButton);
+	const editButton = document.createElement("button");
+	editButton.textContent = "Edit";
+	editButton.addEventListener("click", renderTodoEditForm);
+	domTodoDetails.appendChild(editButton);
 
-    const deleteButton = document.createElement("button");
-    deleteButton.textContent = "Delete";
-    deleteButton.addEventListener("click", () => {
-        removeTodo(selectedTodo);
-        save();
-        selectedTodo = null;
-        renderTodos();
-        renderTodoDetails();
-    });
-    domTodoDetails.appendChild(deleteButton);
+	const deleteButton = document.createElement("button");
+	deleteButton.textContent = "Delete";
+	deleteButton.addEventListener("click", () => {
+		removeTodo(selectedTodo);
+		save();
+		selectedTodo = null;
+		renderTodos();
+		renderTodoDetails();
+	});
+	domTodoDetails.appendChild(deleteButton);
 }
 
-function renderTodoEditForm () {
-    domTodoDetails.innerHTML = "";
+function renderTodoEditForm() {
+	domTodoDetails.innerHTML = "";
 
-    const form = document.createElement("form");
+	const form = document.createElement("form");
 
-    const fields = [
-        { name: "title", text: "Title", type: "text", value: selectedTodo.title, required: true },
-        { name: "description", text: "Description", type: "text", value: selectedTodo.description, required: false },
-        { name: "dueDate", text: "Due date", type: "date", value: selectedTodo.dueDate, required: true }
-    ];
+	const fields = [
+		{
+			name: "title",
+			text: "Title",
+			type: "text",
+			value: selectedTodo.title,
+			required: true,
+		},
+		{
+			name: "description",
+			text: "Description",
+			type: "text",
+			value: selectedTodo.description,
+			required: false,
+		},
+		{
+			name: "dueDate",
+			text: "Due date",
+			type: "date",
+			value: selectedTodo.dueDate,
+			required: true,
+		},
+	];
 
-    for (const field of fields) {
-        const label = document.createElement("label");
-        label.textContent = field.text;
+	for (const field of fields) {
+		const label = document.createElement("label");
+		label.textContent = field.text;
 
-        const input = document.createElement("input");
-        input.setAttribute("type", field.type);
-        input.setAttribute("name", field.name);
-        input.value = field.value;
+		const input = document.createElement("input");
+		input.setAttribute("type", field.type);
+		input.setAttribute("name", field.name);
+		input.value = field.value;
 
-        if (field.required) {
-            input.setAttribute("required", "");
-        }
+		if (field.required) {
+			input.setAttribute("required", "");
+		}
 
-        label.appendChild(input);
-        form.appendChild(label);
-    }
+		label.appendChild(input);
+		form.appendChild(label);
+	}
 
-    const priorityLabel = document.createElement("label");
-    priorityLabel.textContent = "Priority";
+	const priorityLabel = document.createElement("label");
+	priorityLabel.textContent = "Priority";
 
-    const prioritySelect = document.createElement("select");
-    prioritySelect.setAttribute("name", "priority");
+	const prioritySelect = document.createElement("select");
+	prioritySelect.setAttribute("name", "priority");
 
-    for (const priority of ["low", "medium", "high"]) {
-        const option = document.createElement("option");
-        option.setAttribute("value", priority);
-        option.textContent = priority;
-        prioritySelect.appendChild(option);
-    }
+	for (const priority of ["low", "medium", "high"]) {
+		const option = document.createElement("option");
+		option.setAttribute("value", priority);
+		option.textContent = priority;
+		prioritySelect.appendChild(option);
+	}
 
-    prioritySelect.value = selectedTodo.priority;
-    priorityLabel.appendChild(prioritySelect);
-    form.appendChild(priorityLabel);
+	prioritySelect.value = selectedTodo.priority;
+	priorityLabel.appendChild(prioritySelect);
+	form.appendChild(priorityLabel);
 
-    const saveButton = document.createElement("button");
-    saveButton.setAttribute("type", "submit");
-    saveButton.textContent = "Save";
-    form.appendChild(saveButton);
+	const saveButton = document.createElement("button");
+	saveButton.setAttribute("type", "submit");
+	saveButton.textContent = "Save";
+	form.appendChild(saveButton);
 
-    const cancelButton = document.createElement("button");
-    cancelButton.setAttribute("type", "button");
-    cancelButton.textContent = "Cancel";
-    cancelButton.addEventListener("click", renderTodoDetails);
-    form.appendChild(cancelButton);
+	const cancelButton = document.createElement("button");
+	cancelButton.setAttribute("type", "button");
+	cancelButton.textContent = "Cancel";
+	cancelButton.addEventListener("click", renderTodoDetails);
+	form.appendChild(cancelButton);
 
-    form.addEventListener("submit", (event) => {
-        event.preventDefault();
+	form.addEventListener("submit", (event) => {
+		event.preventDefault();
 
-        try {
-            selectedTodo.title = form.elements.title.value;
-            selectedTodo.description = form.elements.description.value;
-            selectedTodo.dueDate = form.elements.dueDate.value;
-            selectedTodo.priority = form.elements.priority.value;
-        } catch (error) {
-            alert(error.message);
-            return;
-        }
+		try {
+			selectedTodo.title = form.elements.title.value;
+			selectedTodo.description = form.elements.description.value;
+			selectedTodo.dueDate = form.elements.dueDate.value;
+			selectedTodo.priority = form.elements.priority.value;
+		} catch (error) {
+			alert(error.message);
+			return;
+		}
 
-        save();
-        renderTodos();
-        renderTodoDetails();
-    });
+		save();
+		renderTodos();
+		renderTodoDetails();
+	});
 
-    domTodoDetails.appendChild(form);
+	domTodoDetails.appendChild(form);
 }
 
 domProjectForm.addEventListener("submit", (event) => {
-    event.preventDefault();
+	event.preventDefault();
 
-    try {
-        createProject(domProjectForm.elements.title.value, domProjectForm.elements.description.value);
-    } catch (error) {
-        alert(error.message);
-        return;
-    }
+	try {
+		createProject(
+			domProjectForm.elements.title.value,
+			domProjectForm.elements.description.value,
+		);
+	} catch (error) {
+		alert(error.message);
+		return;
+	}
 
-    save();
-    domProjectForm.reset();
-    renderProjects();
+	save();
+	domProjectForm.reset();
+	renderProjects();
 });
 
 domTodoForm.addEventListener("submit", (event) => {
-    event.preventDefault();
+	event.preventDefault();
 
-    try {
-        addTodo(
-            domTodoForm.elements.title.value,
-            domTodoForm.elements.description.value,
-            domTodoForm.elements.dueDate.value,
-            domTodoForm.elements.priority.value,
-            selectedProject.id
-        );
-    } catch (error) {
-        alert(error.message);
-        return;
-    }
+	try {
+		addTodo(
+			domTodoForm.elements.title.value,
+			domTodoForm.elements.description.value,
+			domTodoForm.elements.dueDate.value,
+			domTodoForm.elements.priority.value,
+			selectedProject.id,
+		);
+	} catch (error) {
+		alert(error.message);
+		return;
+	}
 
-    save();
-    domTodoForm.reset();
-    renderTodos();
+	save();
+	domTodoForm.reset();
+	renderTodos();
 });

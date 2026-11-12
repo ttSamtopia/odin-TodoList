@@ -3,7 +3,7 @@ import { renderProjects, renderTodos } from "./dom.js";
 import { load } from "./persistence.js";
 
 if (!load()) {
-    createProject("Default", "This is the default project");
+	createProject("Default", "This is the default project");
 }
 renderProjects();
 renderTodos();

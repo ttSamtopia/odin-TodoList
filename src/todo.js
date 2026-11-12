@@ -1,117 +1,127 @@
 let todoHighestId = 0;
 
-export function setTodoHighestId (value) {
-    todoHighestId = value;
+export function setTodoHighestId(value) {
+	todoHighestId = value;
 }
 
 export default class Todo {
-    #id;
-    #completed = false;
-    #title;
-    #description;
-    #dueDate;
-    #priority;
-    #projectId;
-    #checklist;
-    
-    constructor (title, description, dueDate, priority, projectId, checklist = []) {
-        this.title = title;
-        this.description = description;
-        this.dueDate = dueDate;
-        this.priority = priority;
-        this.projectId = projectId;
-        this.checklist = checklist;
-        todoHighestId++;
-        this.#id = todoHighestId;
-    }
+	#id;
+	#completed = false;
+	#title;
+	#description;
+	#dueDate;
+	#priority;
+	#projectId;
+	#checklist;
 
-    get id () {
-        return this.#id;
-    }
+	constructor(
+		title,
+		description,
+		dueDate,
+		priority,
+		projectId,
+		checklist = [],
+	) {
+		this.title = title;
+		this.description = description;
+		this.dueDate = dueDate;
+		this.priority = priority;
+		this.projectId = projectId;
+		this.checklist = checklist;
+		todoHighestId++;
+		this.#id = todoHighestId;
+	}
 
-    get completed () {
-        return this.#completed;
-    }
+	get id() {
+		return this.#id;
+	}
 
-    set completed (value) {
-        if (value !== true && value !== false) {
-            throw new Error("Completed must be a boolean value");
-        } else {
-            this.#completed = value;
-        }
-    }
+	get completed() {
+		return this.#completed;
+	}
 
-    get title () {
-        return this.#title;
-    }
+	set completed(value) {
+		if (value !== true && value !== false) {
+			throw new Error("Completed must be a boolean value");
+		} else {
+			this.#completed = value;
+		}
+	}
 
-    set title (value) {
-        if (typeof value !== "string" || value === "") {
-            throw new Error("Title must be a non-empty string");
-        } else {
-            this.#title = value;
-        }
-    }
+	get title() {
+		return this.#title;
+	}
 
-    get description () {
-        return this.#description;
-    }
+	set title(value) {
+		if (typeof value !== "string" || value === "") {
+			throw new Error("Title must be a non-empty string");
+		} else {
+			this.#title = value;
+		}
+	}
 
-    set description (value) {
-        if (typeof value !== "string") {
-            throw new Error("Description must be a string");
-        } else {
-            this.#description = value;
-        }
-    }
+	get description() {
+		return this.#description;
+	}
 
-    get dueDate () {
-        return this.#dueDate;
-    }
+	set description(value) {
+		if (typeof value !== "string") {
+			throw new Error("Description must be a string");
+		} else {
+			this.#description = value;
+		}
+	}
 
-    set dueDate (value) {
-        // Add more robust date validation later
-        if (typeof value !== "string") {
-            throw new Error("Due date must be a string");
-        } else {
-            this.#dueDate = value;
-        }
-    }
+	get dueDate() {
+		return this.#dueDate;
+	}
 
-    get priority () {
-        return this.#priority;
-    }
+	set dueDate(value) {
+		// Add more robust date validation later
+		if (typeof value !== "string") {
+			throw new Error("Due date must be a string");
+		} else {
+			this.#dueDate = value;
+		}
+	}
 
-    set priority (value) {
-        if (value !== "low" && value !== "medium" && value !== "high") {
-            throw new Error("Priority must be 'low', 'medium', or 'high'");
-        } else {
-            this.#priority = value;
-        }
-    }
+	get priority() {
+		return this.#priority;
+	}
 
-    get projectId () {
-        return this.#projectId;
-    }
+	set priority(value) {
+		if (value !== "low" && value !== "medium" && value !== "high") {
+			throw new Error("Priority must be 'low', 'medium', or 'high'");
+		} else {
+			this.#priority = value;
+		}
+	}
 
-    set projectId (value) {
-        // Add a check to ensure the project exists
-        if (!Number.isInteger(value) || value < 1) {
-            throw new Error("Project ID must be a positive integer");
-        } else {
-            this.#projectId = value;
-        }
-    }
+	get projectId() {
+		return this.#projectId;
+	}
 
-    get checklist () {
-        return this.#checklist.slice();
-    }
+	set projectId(value) {
+		// Add a check to ensure the project exists
+		if (!Number.isInteger(value) || value < 1) {
+			throw new Error("Project ID must be a positive integer");
+		} else {
+			this.#projectId = value;
+		}
+	}
 
-    set checklist (value) {
-        if (!Array.isArray(value) || !value.every(item => typeof item === "string")) {
-            throw new Error("Checklist must be an array of strings");
-        } else {
-            this.#checklist = value.slice();
-        }
-    }
+	get checklist() {
+		return this.#checklist.slice();
+	}
+
+	set checklist(value) {
+		if (
+			!Array.isArray(value) ||
+			!value.every((item) => typeof item === "string")
+		) {
+			throw new Error("Checklist must be an array of strings");
+		} else {
+			this.#checklist = value.slice();
+		}
+	}
 }

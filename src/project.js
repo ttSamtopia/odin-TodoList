@@ -1,46 +1,46 @@
 let projectHighestId = 0;
 
-export function setProjectHighestId (value) {
-    projectHighestId = value;
+export function setProjectHighestId(value) {
+	projectHighestId = value;
 }
 
 export default class Project {
-    #title;
-    #description;
-    #id;
+	#title;
+	#description;
+	#id;
 
-    constructor (title, description) {
-        this.title = title;
-        this.description = description;
-        projectHighestId++;
-        this.#id = projectHighestId;
-    }
+	constructor(title, description) {
+		this.title = title;
+		this.description = description;
+		projectHighestId++;
+		this.#id = projectHighestId;
+	}
 
-    get title () {
-        return this.#title;
-    }
+	get title() {
+		return this.#title;
+	}
 
-    set title (value) {
-        if (typeof value !== "string" || value === "") {
-            throw new Error("Title must be a non-empty string");
-        } else {
-            this.#title = value;
-        }
-    }
+	set title(value) {
+		if (typeof value !== "string" || value === "") {
+			throw new Error("Title must be a non-empty string");
+		} else {
+			this.#title = value;
+		}
+	}
 
-    get description () {
-        return this.#description;
-    }
+	get description() {
+		return this.#description;
+	}
 
-    set description (value) {
-        if (typeof value !== "string") {
-            throw new Error("Description must be a string");
-        } else {
-            this.#description = value;
-        }
-    }
+	set description(value) {
+		if (typeof value !== "string") {
+			throw new Error("Description must be a string");
+		} else {
+			this.#description = value;
+		}
+	}
 
-    get id () {
-        return this.#id;
-    }
+	get id() {
+		return this.#id;
+	}
 }
